@@ -1,6 +1,8 @@
 #include "ParkingLot.h"
 
 ParkingLot* ParkingLot::parkingLotInstance;
+
+//Create new parking lot -- only one parking lot should be craeted.
 ParkingLot::ParkingLot(int numSlots){
   if(parkingLotInstance == NULL){
     parkingLotInstance = this;
@@ -13,14 +15,14 @@ ParkingLot::ParkingLot(int numSlots){
   cout<<"Created parking of "<<numSlots<<" slots"<<endl;
 }
 
+//Initialize parking lot to default values
 void ParkingLot::init_ParkingLot(int numSlots){
-  isEmpty = true;
-  isFull = false;
   slots = vector<Slot>(numSlots,Slot());
 }
 
+//Park vehicle in nearest empty slot
 void ParkingLot::park(string carRegNum, int driverAge){
-  int i;
+  int i; //i+1 represent slot number
   for(i=0;i<slots.size();i++){
     if(slots[i].isEmptySlot()){
       slots[i].fillSlot();
@@ -29,12 +31,13 @@ void ParkingLot::park(string carRegNum, int driverAge){
       break;
     }
   }
-  if(i==slots.size()){
+  if(i==slots.size()){ //parking lot is already full
     cout<<"No parking slot is empty !"<<endl;
   }
   cout<<"Car with vehicle registration number "<<carRegNum<<" has been parked at slot number "<<i+1<<endl;
 }
 
+//Vacate the given parking slot
 void ParkingLot::leave(int numSlot){
   if(!slots[numSlot-1].isEmptySlot()){
     cout<<"Slot number "<<numSlot<<" vacated, the car with vehicle registration number "<<slots[numSlot-1].getCarRegNum()<<" left the space, the driver of the car was of age "<<slots[numSlot-1].getDriverAge()<<endl;
@@ -45,6 +48,7 @@ void ParkingLot::leave(int numSlot){
   }
 }
 
+//Get all slots acquired by drivers of given age
 vector<int> ParkingLot::getSlotsbyAge(int driverAge){
   vector<int> slotNums;
   for(int i=0;i<slots.size();i++){
@@ -55,6 +59,7 @@ vector<int> ParkingLot::getSlotsbyAge(int driverAge){
   return slotNums;
 }
 
+//Get all car registration numbers whose drivers are of given age
 vector<string> ParkingLot::getCarRegNumbyAge(int driverAge){
   vector<string> carRegNums;
   for(int i=0;i<slots.size();i++){
@@ -65,6 +70,7 @@ vector<string> ParkingLot::getCarRegNumbyAge(int driverAge){
   return carRegNums;
 }
 
+//Get the slot number of given car registration number
 int ParkingLot::getSlotbyCarRegNum(string carRegNum){
   int slotNum=-1;
   for(int i=0;i<slots.size();i++){
